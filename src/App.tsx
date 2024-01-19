@@ -13,6 +13,10 @@ import Snake from '@/classes/snake'
 import { Direction, RowCol } from '@/types'
 import Logo from '@/assets/logo.png'
 import PlayIcon from '@/assets/play_icon.svg'
+import ArrowLeft from '@/assets/arrow_left.svg'
+import ArrowRight from '@/assets/arrow_right.svg'
+import ArrowUp from '@/assets/arrow_up.svg'
+import ArrowDown from '@/assets/arrow_down.svg'
 
 const INITIAL_SNAKE_DIRECTION = RIGHT
 
@@ -58,6 +62,7 @@ function App() {
     setDirection(INITIAL_SNAKE_DIRECTION)
     setFood(generateFood(snake.body))
     setIsGameOver(false)
+    setIntervalId(null)
   }
 
   const startTimer = () => {
@@ -216,6 +221,67 @@ function App() {
         </div>
       </div>
       
+      {IS_MOBILE &&
+      <div class='flex flex-col gap-[3px] mt-8'>
+        <button 
+          class='flex justify-center'
+          onClick={() => {
+            if(intervalId() !== null && direction() !== oppositeDirection[UP]) {
+              setDirection(UP)
+            }
+          }}
+        >
+          <img
+            src={ArrowUp}
+            alt='arrow up'
+            class='w-[50px]'
+          />
+        </button>
+        <div class='flex gap-[30px]'>
+          <button
+            onClick={() => {
+              if(intervalId() !== null && direction() !== oppositeDirection[LEFT]) {
+                setDirection(LEFT)
+              }
+            }}
+          >
+            <img
+              src={ArrowLeft}
+              alt='arrow left'
+              class='w-[50px]'
+            />
+          </button>
+
+          <button
+            onClick={() => {
+              if(intervalId() !== null && direction() !== oppositeDirection[RIGHT]) {
+                setDirection(RIGHT)
+              }
+            }}
+          >
+            <img
+              src={ArrowRight}
+              alt='arrow right'
+              class='w-[50px]'
+            />
+          </button>
+        </div>
+        <button 
+          class='flex justify-center'
+          onClick={() => {
+            if(intervalId() !== null && direction() !== oppositeDirection[DOWN]) {
+              setDirection(DOWN)
+            }
+          }}
+        >
+          <img
+            src={ArrowDown}
+            alt='arrow down'
+            class='w-[50px]'
+          />
+        </button>
+      </div>
+      }
     </div>
   )
 }
