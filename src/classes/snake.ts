@@ -1,5 +1,4 @@
-import { 
-  IS_MOBILE, 
+import {
   ROW_LENGTH_DESKTOP,
   COL_LENGTH_DESKTOP,
   RIGHT,

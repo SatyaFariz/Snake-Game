@@ -158,10 +158,27 @@ function Desktop() {
             <div class='text-white text-3xl mb-1'>Game Over</div>
             <div class='text-white mb-1'>Final length: {snakeLength()}</div>
             {IS_MOBILE ?
-              <div class='text-white'>Click play again!</div>
+              <div class='text-white'>Click to play again!</div>
               :
               <div class='text-white'>Click or press Enter or Space to play again!</div>
             }
+          </div>
+          
+          <img
+            src={PlayIcon}
+            alt='play again'
+            class='w-[70px]'
+          />
+        </div>
+        }
+
+        {IS_MOBILE && !isGameOver() && intervalId() === null &&
+        <div
+          onClick={startTimer}
+          class='absolute left-0 right-0 bottom-0 top-0 z-9 bg-black bg-opacity-75 flex flex-col items-center justify-center cursor-pointer'
+        >
+          <div class='absolute top-[30px] flex flex-col items-center'>
+            <div class='text-white text-3xl mb-1'>Click to play!</div>
           </div>
           
           <img
