@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
       target: 'esnext',
       polyfillDynamicImport: false,
     },
-    base: '/SnakeGame/',
+    base: '/Snake-Game/',
     mode: env.NODE_ENV,
     resolve: {
       alias: {

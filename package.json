@@ -2,7 +2,7 @@
   "name": "snakegame",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://satyafariz.github.io/SnakeGame/",
+  "homepage": "https://satyafariz.github.io/Snake-Game/",
   "type": "module",
   "scripts": {
     "dev": "vite",
