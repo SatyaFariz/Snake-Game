@@ -10,7 +10,9 @@ import {
 import { For, createEffect, onCleanup, onMount } from 'solid-js'
 import { createSignal } from 'solid-js'
 import Snake from '@/classes/snake'
-import { Direction } from '@/types'
+import { Direction, RowCol } from '@/types'
+
+const INITIAL_SNAKE_DIRECTION = IS_MOBILE ? DOWN : RIGHT
 
 const oppositeDirection = {
   [RIGHT]: LEFT,
@@ -19,20 +21,58 @@ const oppositeDirection = {
   [DOWN]: UP
 }
 
-const grid = new Array(ROW_LENGTH_DESKTOP).fill(new Array(COL_LENGTH_DESKTOP).fill(0))
+const grid: number[][] = new Array(ROW_LENGTH_DESKTOP).fill(new Array(COL_LENGTH_DESKTOP).fill(0))
+
+const generateFood = (body: { [key: string]: true }) => {
+  const rowCols: RowCol[] = []
+  for(let i = 0; i < grid.length; i++) {
+    for(let j = 0; j < grid[i].length; j++) {
+      const rowCol: RowCol = [i, j]
+      if(!body[JSON.stringify([i, j])]) {
+        rowCols.push(rowCol)
+      }
+    }
+  }
+  const randomIndex = Math.floor(Math.random() * rowCols.length)
+  return rowCols[randomIndex]
+}
 
 function Desktop() {
   const [snake, setSnake] = createSignal(new Snake())
   const [snakeBody, setSnakeBody] = createSignal(snake().body)
   const [snakeLength, setSnakeLength] = createSignal(snake().length)
-  const [direction, setDirection] = createSignal(IS_MOBILE ? DOWN : RIGHT)
+  const [food, setFood] = createSignal<RowCol>(generateFood(snakeBody()))
+  const [direction, setDirection] = createSignal<Direction>(INITIAL_SNAKE_DIRECTION)
   const [intervalId, setIntervalId] = createSignal<NodeJS.Timeout | null>(null)
+  const [isGameOver, setIsGameOver] = createSignal(false)
+
+  
+
+  const resetGameState = () => {
+    const snake = new Snake()
+    setSnake(snake)
+    setSnakeBody(snake.body)
+    setSnakeLength(snake.length)
+    setDirection(INITIAL_SNAKE_DIRECTION)
+    setFood(generateFood(snake.body))
+    setIsGameOver(false)
+  }
 
   const startTimer = () => {
+    if(isGameOver()) resetGameState()
+
     const id = setInterval(() => {
-      const { length, body } = snake().moveOneStep(direction() as Direction)
-      setSnakeBody(body)
-      setSnakeLength(length)
+      try {
+        const { length, body, isFoodEaten } = snake().moveOneStep(direction(), food())
+        setSnakeBody(body)
+        setSnakeLength(length)
+        if(isFoodEaten) {
+          setFood(generateFood(body))
+        }
+      } catch(e) {
+        setIsGameOver(true)
+        stopTimer()
+      }
     }, 130)
     setIntervalId(id)
   }
@@ -60,6 +100,14 @@ function Desktop() {
         if(direction() !== oppositeDirection[RIGHT])
           setDirection(RIGHT)
         break
+      case 'Enter':
+        if(intervalId() !== null) stopTimer()
+        else startTimer()
+        break
+      case ' ':
+          if(intervalId() !== null) stopTimer()
+          else startTimer()
+          break
       default:
         break
     }
@@ -101,7 +149,7 @@ function Desktop() {
                       <div 
                         class={[
                           'aspect-square', 
-                          snakeBody()[JSON.stringify([i(), j()])] ? 'bg-black' : 'bg-pink-300'
+                          snakeBody()[JSON.stringify([i(), j()])] ? 'bg-black' : (JSON.stringify([i(), j()]) === JSON.stringify(food()) ? 'bg-red-500' : 'bg-pink-300')
                         ].join(' ')}
                       >
 

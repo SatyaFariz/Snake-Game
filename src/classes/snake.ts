@@ -56,9 +56,7 @@ export default class Snake {
     this.length++
   }
 
-  moveOneStep(direction: Direction) {
-    this.removeTail()
-
+  moveOneStep(direction: Direction, food: RowCol) {
     const [currentRow, currentCol] = this.list?.data as RowCol
     const nextRowCol: { [key: string]: RowCol } = {
       [RIGHT]: currentCol === COL_LENGTH_DESKTOP - 1 ? [currentRow, 0] : [currentRow, currentCol + 1],
@@ -67,11 +65,25 @@ export default class Snake {
       [DOWN]: currentRow === ROW_LENGTH_DESKTOP - 1 ? [0, currentCol] : [currentRow + 1, currentCol]
     }
 
+    let isFoodEaten = false
+    const nextRowColStr = JSON.stringify(nextRowCol[direction])
+    if(nextRowColStr !== JSON.stringify(food)) {
+      this.removeTail()
+    } else {
+      isFoodEaten = true
+    }
+
+    if(this.body[nextRowColStr]) {
+      // game over
+      throw new Error()
+    }
+
     this.appendHead(nextRowCol[direction])
 
     return { 
       body: { ...this.body }, 
-      length: this.length 
+      length: this.length,
+      isFoodEaten
     }
   }
 
