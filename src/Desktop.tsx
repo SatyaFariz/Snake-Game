@@ -12,6 +12,7 @@ import { createSignal } from 'solid-js'
 import Snake from '@/classes/snake'
 import { Direction, RowCol } from '@/types'
 import Logo from '@/assets/logo.png'
+import PlayIcon from '@/assets/play_icon.svg'
 
 const INITIAL_SNAKE_DIRECTION = IS_MOBILE ? DOWN : RIGHT
 
@@ -145,7 +146,25 @@ function Desktop() {
       <div class='py-2 mt-6 text-sm'>
         Length: {snakeLength()}
       </div>
-      <div class='flex flex-col'>
+      <div class='relative flex flex-col'>
+        {isGameOver() &&
+        <div
+          onClick={startTimer}
+          class='absolute left-0 right-0 bottom-0 top-0 z-9 bg-black bg-opacity-75 flex flex-col items-center justify-center cursor-pointer'
+        >
+          <div class='absolute top-[30px] flex flex-col items-center'>
+            <div class='text-white text-3xl mb-1'>Game Over</div>
+            <div class='text-white mb-1'>Final length: {snakeLength()}</div>
+            <div class='text-white'>Click or press Enter or Space to play again!</div>
+          </div>
+          
+          <img
+            src={PlayIcon}
+            alt='play again'
+            class='w-[70px]'
+          />
+        </div>
+        }
         <div
           style={{
             'grid-template-columns': `repeat(${COL_LENGTH_DESKTOP}, 15px)`,
@@ -164,7 +183,6 @@ function Desktop() {
                           snakeBody()[JSON.stringify([i(), j()])] ? 'bg-black' : (JSON.stringify([i(), j()]) === JSON.stringify(food()) ? 'bg-purple-500' : 'bg-blue-50')
                         ].join(' ')}
                       >
-
                       </div>
                     )
                   }}
