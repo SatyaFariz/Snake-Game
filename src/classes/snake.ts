@@ -1,6 +1,6 @@
 import {
-  ROW_LENGTH_DESKTOP,
-  COL_LENGTH_DESKTOP,
+  ROW_LENGTH,
+  COL_LENGTH,
   RIGHT,
   LEFT,
   UP,
@@ -15,7 +15,7 @@ export default class Snake {
   public length: number = 0
 
   constructor() {
-    const verticalCenter = Math.floor(ROW_LENGTH_DESKTOP / 2)
+    const verticalCenter = Math.floor(ROW_LENGTH / 2)
     this.list = new ListNode([verticalCenter, 2])
     this.list.next = new ListNode([verticalCenter, 1])
     this.list.next.next = new ListNode([verticalCenter, 0])
@@ -56,10 +56,10 @@ export default class Snake {
   moveOneStep(direction: Direction, food: RowCol) {
     const [currentRow, currentCol] = this.list?.data as RowCol
     const nextRowCol: { [key: string]: RowCol } = {
-      [RIGHT]: currentCol === COL_LENGTH_DESKTOP - 1 ? [currentRow, 0] : [currentRow, currentCol + 1],
-      [LEFT]: currentCol === 0 ? [currentRow, COL_LENGTH_DESKTOP - 1]: [currentRow, currentCol - 1],
-      [UP]: currentRow === 0 ? [ROW_LENGTH_DESKTOP - 1, currentCol] : [currentRow - 1, currentCol],
-      [DOWN]: currentRow === ROW_LENGTH_DESKTOP - 1 ? [0, currentCol] : [currentRow + 1, currentCol]
+      [RIGHT]: currentCol === COL_LENGTH - 1 ? [currentRow, 0] : [currentRow, currentCol + 1],
+      [LEFT]: currentCol === 0 ? [currentRow, COL_LENGTH - 1]: [currentRow, currentCol - 1],
+      [UP]: currentRow === 0 ? [ROW_LENGTH - 1, currentCol] : [currentRow - 1, currentCol],
+      [DOWN]: currentRow === ROW_LENGTH - 1 ? [0, currentCol] : [currentRow + 1, currentCol]
     }
 
     let isFoodEaten = false
