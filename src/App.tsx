@@ -237,7 +237,7 @@ function App() {
             class='w-[50px]'
           />
         </button>
-        <div class='flex gap-[30px]'>
+        <div class='flex gap-[50px]'>
           <button
             onClick={() => {
               if(intervalId() !== null && direction() !== oppositeDirection[LEFT]) {
