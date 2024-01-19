@@ -1,5 +1,5 @@
-import Desktop from "@/Desktop"
-import Mobile from "@/Mobile"
+import Desktop from '@/Desktop'
+import Mobile from '@/Mobile'
 
 function App() {
 

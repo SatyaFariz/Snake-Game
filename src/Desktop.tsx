@@ -11,6 +11,7 @@ import { For, createEffect, onCleanup, onMount } from 'solid-js'
 import { createSignal } from 'solid-js'
 import Snake from '@/classes/snake'
 import { Direction, RowCol } from '@/types'
+import Logo from '@/assets/logo.png'
 
 const INITIAL_SNAKE_DIRECTION = IS_MOBILE ? DOWN : RIGHT
 
@@ -131,9 +132,20 @@ function Desktop() {
   })
 
   return (
-    <div>
-      
-      <div class='flex justify-center w-full'>
+    <div class='flex flex-col items-center w-full'>
+      <img
+        src={Logo}
+        alt='logo'
+        class='w-[400px] p-6'
+      />
+      <p class='text-sm'>
+        Use arrow keys (↑, →, ↓, ←) to change direction. Use Enter or Space to start and pause.
+      </p>
+
+      <div class='py-2 mt-6 text-sm'>
+        Length: {snakeLength()}
+      </div>
+      <div class='flex flex-col'>
         <div
           style={{
             'grid-template-columns': `repeat(${COL_LENGTH_DESKTOP}, 15px)`,
@@ -149,7 +161,7 @@ function Desktop() {
                       <div 
                         class={[
                           'aspect-square', 
-                          snakeBody()[JSON.stringify([i(), j()])] ? 'bg-black' : (JSON.stringify([i(), j()]) === JSON.stringify(food()) ? 'bg-red-500' : 'bg-pink-300')
+                          snakeBody()[JSON.stringify([i(), j()])] ? 'bg-black' : (JSON.stringify([i(), j()]) === JSON.stringify(food()) ? 'bg-purple-500' : 'bg-blue-50')
                         ].join(' ')}
                       >
 
@@ -161,16 +173,6 @@ function Desktop() {
             }}
           </For>
         </div>
-      </div>
-
-      <div class='flex gap-4'>
-
-        <button onClick={startTimer} disabled={intervalId() !== null}>
-        Start
-        </button>
-        <button onClick={stopTimer} disabled={intervalId() === null}>
-          Stop
-        </button>
       </div>
       
     </div>

@@ -1,9 +1,9 @@
 export default class ListNode<T> {
-  data: T;
-  next: ListNode<T> | null;
+  data: T
+  next: ListNode<T> | null
 
   constructor(data: T) {
-    this.data = data;
-    this.next = null;
+    this.data = data
+    this.next = null
   }
 }
