@@ -222,7 +222,7 @@ function App() {
       </div>
       
       {IS_MOBILE &&
-      <div class='flex flex-col gap-[3px] mt-8'>
+      <div class='flex flex-col gap-[3px] p-8'>
         <button 
           class='flex justify-center'
           onClick={() => {
