@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       {window.innerWidth <= 640 ?
-      <Mobile/>
+      <Desktop/>
       :
       <Desktop/>
       }

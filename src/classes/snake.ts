@@ -16,19 +16,17 @@ export default class Snake {
   public length: number = 0
 
   constructor() {
-    if(!IS_MOBILE) {
-      const verticalCenter = Math.floor(ROW_LENGTH_DESKTOP / 2)
-      this.list = new ListNode([verticalCenter, 2])
-      this.list.next = new ListNode([verticalCenter, 1])
-      this.list.next.next = new ListNode([verticalCenter, 0])
+    const verticalCenter = Math.floor(ROW_LENGTH_DESKTOP / 2)
+    this.list = new ListNode([verticalCenter, 2])
+    this.list.next = new ListNode([verticalCenter, 1])
+    this.list.next.next = new ListNode([verticalCenter, 0])
 
-      let node: ListNode<RowCol> | null = this.list
-      while(node) {
-        this.body[JSON.stringify(node.data)] = true
-        this.length++
+    let node: ListNode<RowCol> | null = this.list
+    while(node) {
+      this.body[JSON.stringify(node.data)] = true
+      this.length++
 
-        node = node.next
-      }
+      node = node.next
     }
   }
 

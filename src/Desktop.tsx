@@ -14,7 +14,7 @@ import { Direction, RowCol } from '@/types'
 import Logo from '@/assets/logo.png'
 import PlayIcon from '@/assets/play_icon.svg'
 
-const INITIAL_SNAKE_DIRECTION = IS_MOBILE ? DOWN : RIGHT
+const INITIAL_SNAKE_DIRECTION = RIGHT
 
 const oppositeDirection = {
   [RIGHT]: LEFT,
@@ -139,14 +139,16 @@ function Desktop() {
         alt='logo'
         class='w-[400px] p-6'
       />
-      <p class='text-sm'>
+      {!IS_MOBILE &&
+      <p class='text-sm mb-6'>
         Use arrow keys (↑, →, ↓, ←) to change direction. Use Enter or Space to start and pause.
       </p>
+      }
 
-      <div class='py-2 mt-6 text-sm'>
+      <div class='py-2 text-sm'>
         Length: {snakeLength()}
       </div>
-      <div class='relative flex flex-col'>
+      <div class='relative flex flex-col w-full lg:w-[unset]'>
         {isGameOver() &&
         <div
           onClick={startTimer}
@@ -155,7 +157,11 @@ function Desktop() {
           <div class='absolute top-[30px] flex flex-col items-center'>
             <div class='text-white text-3xl mb-1'>Game Over</div>
             <div class='text-white mb-1'>Final length: {snakeLength()}</div>
-            <div class='text-white'>Click or press Enter or Space to play again!</div>
+            {IS_MOBILE ?
+              <div class='text-white'>Click play again!</div>
+              :
+              <div class='text-white'>Click or press Enter or Space to play again!</div>
+            }
           </div>
           
           <img
@@ -167,7 +173,7 @@ function Desktop() {
         }
         <div
           style={{
-            'grid-template-columns': `repeat(${COL_LENGTH_DESKTOP}, 15px)`,
+            'grid-template-columns': `repeat(${COL_LENGTH_DESKTOP}, ${IS_MOBILE ? '1fr' : '15px'})`,
           }}
           class='grid'
         >
