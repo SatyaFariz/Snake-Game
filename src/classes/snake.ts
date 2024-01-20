@@ -6,13 +6,14 @@ import {
   UP,
   DOWN
 } from '@/constants'
-import { Direction, RowCol } from '@/types'
+import { Direction, RowCol, SnakeBody } from '@/types'
 import ListNode from '@/classes/listnode'
 
 export default class Snake {
   private list: ListNode<RowCol> | null = null
-  public body: { [key: string]: true } = {}
+  public body: SnakeBody = {}
   public length: number = 0
+  public currentDirection: Direction = RIGHT
 
   constructor() {
     const verticalCenter = Math.floor(ROW_LENGTH / 2)
@@ -76,6 +77,7 @@ export default class Snake {
     }
 
     this.appendHead(nextRowCol[direction])
+    this.currentDirection = direction
 
     return { 
       body: { ...this.body }, 

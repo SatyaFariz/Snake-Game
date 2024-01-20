@@ -10,15 +10,13 @@ import {
 import { For, createEffect, onCleanup, onMount } from 'solid-js'
 import { createSignal } from 'solid-js'
 import Snake from '@/classes/snake'
-import { Direction, RowCol } from '@/types'
+import { Direction, RowCol, SnakeBody } from '@/types'
 import Logo from '@/assets/logo.png'
 import PlayIcon from '@/assets/play_icon.svg'
 import ArrowLeft from '@/assets/arrow_left.svg'
 import ArrowRight from '@/assets/arrow_right.svg'
 import ArrowUp from '@/assets/arrow_up.svg'
 import ArrowDown from '@/assets/arrow_down.svg'
-
-const INITIAL_SNAKE_DIRECTION = RIGHT
 
 const oppositeDirection = {
   [RIGHT]: LEFT,
@@ -29,7 +27,7 @@ const oppositeDirection = {
 
 const grid: number[][] = new Array(ROW_LENGTH).fill(new Array(COL_LENGTH).fill(0))
 
-const generateFood = (body: { [key: string]: true }) => {
+const generateFood = (body: SnakeBody) => {
   const rowCols: RowCol[] = []
   for(let i = 0; i < grid.length; i++) {
     for(let j = 0; j < grid[i].length; j++) {
@@ -48,7 +46,7 @@ function App() {
   const [snakeBody, setSnakeBody] = createSignal(snake().body)
   const [snakeLength, setSnakeLength] = createSignal(snake().length)
   const [food, setFood] = createSignal<RowCol>(generateFood(snakeBody()))
-  const [direction, setDirection] = createSignal<Direction>(INITIAL_SNAKE_DIRECTION)
+  const [direction, setDirection] = createSignal<Direction>(snake().currentDirection)
   const [intervalId, setIntervalId] = createSignal<NodeJS.Timeout | null>(null)
   const [isGameOver, setIsGameOver] = createSignal(false)
 
@@ -59,7 +57,7 @@ function App() {
     setSnake(snake)
     setSnakeBody(snake.body)
     setSnakeLength(snake.length)
-    setDirection(INITIAL_SNAKE_DIRECTION)
+    setDirection(snake.currentDirection)
     setFood(generateFood(snake.body))
     setIsGameOver(false)
     setIntervalId(null)
@@ -89,23 +87,40 @@ function App() {
     setIntervalId(null)
   }
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    switch (event.key) {
-      case 'ArrowUp':
-        if(direction() !== oppositeDirection[UP])
+  const changeDirection = (direction: Direction) => {
+    switch(direction) {
+      case UP:
+        if(intervalId() !== null && snake().currentDirection !== oppositeDirection[UP])
           setDirection(UP)
         break
-      case 'ArrowDown':
-        if(direction() !== oppositeDirection[DOWN])
+      case DOWN:
+        if(intervalId() !== null && snake().currentDirection !== oppositeDirection[DOWN])
           setDirection(DOWN)
         break
-      case 'ArrowLeft':
-        if(direction() !== oppositeDirection[LEFT])
+      case LEFT:
+        if(intervalId() !== null && snake().currentDirection !== oppositeDirection[LEFT])
           setDirection(LEFT)
         break
-      case 'ArrowRight':
-        if(direction() !== oppositeDirection[RIGHT])
+      default:
+        if(intervalId() !== null && snake().currentDirection !== oppositeDirection[RIGHT])
           setDirection(RIGHT)
+        break
+    }
+  }
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    switch(event.key) {
+      case 'ArrowUp':
+        changeDirection(UP)
+        break
+      case 'ArrowDown':
+        changeDirection(DOWN)
+        break
+      case 'ArrowLeft':
+        changeDirection(LEFT)
+        break
+      case 'ArrowRight':
+        changeDirection(RIGHT)
         break
       case 'Enter':
         if(intervalId() !== null) stopTimer()
@@ -225,11 +240,7 @@ function App() {
       <div class='flex flex-col gap-[3px] p-8'>
         <button 
           class='flex justify-center'
-          onClick={() => {
-            if(intervalId() !== null && direction() !== oppositeDirection[UP]) {
-              setDirection(UP)
-            }
-          }}
+          onClick={() => changeDirection(UP)}
         >
           <img
             src={ArrowUp}
@@ -239,11 +250,7 @@ function App() {
         </button>
         <div class='flex gap-[50px]'>
           <button
-            onClick={() => {
-              if(intervalId() !== null && direction() !== oppositeDirection[LEFT]) {
-                setDirection(LEFT)
-              }
-            }}
+            onClick={() => changeDirection(LEFT)}
           >
             <img
               src={ArrowLeft}
@@ -253,11 +260,7 @@ function App() {
           </button>
 
           <button
-            onClick={() => {
-              if(intervalId() !== null && direction() !== oppositeDirection[RIGHT]) {
-                setDirection(RIGHT)
-              }
-            }}
+            onClick={() => changeDirection(RIGHT)}
           >
             <img
               src={ArrowRight}
@@ -268,11 +271,7 @@ function App() {
         </div>
         <button 
           class='flex justify-center'
-          onClick={() => {
-            if(intervalId() !== null && direction() !== oppositeDirection[DOWN]) {
-              setDirection(DOWN)
-            }
-          }}
+          onClick={() => changeDirection(DOWN)}
         >
           <img
             src={ArrowDown}
