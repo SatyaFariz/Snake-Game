@@ -161,7 +161,7 @@ function App() {
       />
       {!IS_MOBILE &&
       <p class='text-sm mb-6'>
-        Use arrow keys (↑, →, ↓, ←) to change direction. Use Enter or Space to start and pause.
+        Press arrow keys (↑, →, ↓, ←) to change direction. Press Enter or Space to start and pause.
       </p>
       }
 
